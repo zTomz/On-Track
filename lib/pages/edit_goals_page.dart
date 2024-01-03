@@ -231,7 +231,7 @@ class EditGoalsPageState extends State<EditGoalsPage> {
                             return;
                           }
 
-                          goalProvider.put(
+                          goalProvider.putGoal(
                             Goal.create(
                               taskTextController.text,
                               descriptionTextController.text,
@@ -272,9 +272,9 @@ class EditGoalsPageState extends State<EditGoalsPage> {
                   ),
                   Expanded(
                     child: ListView.builder(
-                      itemCount: goalProvider.goals.length,
+                      itemCount: goalProvider.allGoals.length,
                       itemBuilder: (context, index) {
-                        final currentGoal = goalProvider.goals[index];
+                        final currentGoal = goalProvider.allGoals[index];
 
                         return ListTile(
                           title: Text(

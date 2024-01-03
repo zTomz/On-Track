@@ -22,7 +22,7 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Planer'),
+        title: Text(goalProvider.extractDay(goalProvider.selectedDay)),
         centerTitle: true,
         leading: IconButton(
           onPressed: () {},
@@ -42,9 +42,9 @@ class _HomePageState extends State<HomePage> {
         children: [
           Expanded(
             child: ListView.builder(
-              itemCount: goalProvider.goals.length,
+              itemCount: goalProvider.goalsOfDay.length,
               itemBuilder: (context, index) {
-                final currentGoal = goalProvider.goals[index];
+                final currentGoal = goalProvider.goalsOfDay[index];
                 final isTileExpanded = expandedIndexes.contains(index);
 
                 return Card(
@@ -53,7 +53,7 @@ class _HomePageState extends State<HomePage> {
                       top: index == 0
                           ? const Radius.circular(20)
                           : const Radius.circular(12),
-                      bottom: index == goalProvider.goals.length - 1
+                      bottom: index == goalProvider.goalsOfDay.length - 1
                           ? const Radius.circular(20)
                           : const Radius.circular(12),
                     ),
@@ -106,7 +106,7 @@ class _HomePageState extends State<HomePage> {
                                 : Checkbox(
                                     value: currentGoal.value as bool? ?? false,
                                     onChanged: (value) {
-                                      goalProvider.put(
+                                      goalProvider.putGoal(
                                         currentGoal.copyWith(
                                           value: value ?? false,
                                         ),
@@ -128,15 +128,16 @@ class _HomePageState extends State<HomePage> {
 
                                 return;
                               }
+
                               if (currentGoal.valueType ==
                                   GoalValueType.number) {
-                                goalProvider.put(
+                                goalProvider.putGoal(
                                   currentGoal.copyWith(
                                     value: double.parse(value),
                                   ),
                                 );
                               } else {
-                                goalProvider.put(
+                                goalProvider.putGoal(
                                   currentGoal.copyWith(
                                     value: value,
                                   ),
