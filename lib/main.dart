@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:planer/constants/colors.dart';
-import 'package:planer/pages/init_app_page.dart';
+import 'package:planer/pages/home_page.dart';
+import 'package:planer/provider/day_provider.dart';
 import 'package:planer/provider/goal_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -10,6 +11,9 @@ void main() {
       providers: [
         ChangeNotifierProvider(
           create: (_) => GoalProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => DayProvider(),
         ),
       ],
       child: const MyApp(),
@@ -38,7 +42,7 @@ class MyApp extends StatelessWidget {
           brightness: Brightness.dark,
         ),
       ),
-      home: const InitAppPage(),
+      home: const HomePage(),
     );
   }
 }

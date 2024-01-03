@@ -9,14 +9,14 @@ import 'package:planer/pages/home_page.dart';
 import 'package:planer/provider/goal_provider.dart';
 import 'package:provider/provider.dart';
 
-class InitAppPage extends StatefulHookWidget {
-  const InitAppPage({Key? key}) : super(key: key);
+class EditGoalsPage extends StatefulHookWidget {
+  const EditGoalsPage({Key? key}) : super(key: key);
 
   @override
-  InitAppPageState createState() => InitAppPageState();
+  EditGoalsPageState createState() => EditGoalsPageState();
 }
 
-class InitAppPageState extends State<InitAppPage> {
+class EditGoalsPageState extends State<EditGoalsPage> {
   bool daySelectorOpened = false;
   List<int> selectedWeekdays = [1, 2, 3, 4, 5, 6, 7];
   GoalValueType valueType = GoalValueType.bool;
@@ -37,7 +37,8 @@ class InitAppPageState extends State<InitAppPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Planer'),
+        title: const Text('Ziele ändern'),
+        automaticallyImplyLeading: false,
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
