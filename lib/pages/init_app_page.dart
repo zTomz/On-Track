@@ -23,6 +23,8 @@ class InitAppPageState extends State<InitAppPage> {
 
   List<Goal> goals = [];
 
+  final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     final goalProvider = context.watch<GoalProvider>();
@@ -54,18 +56,28 @@ class InitAppPageState extends State<InitAppPage> {
                 Row(
                   children: [
                     Expanded(
-                      child: TextField(
-                        controller: taskTextController,
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(15),
-                              topRight: Radius.circular(5),
-                              bottomLeft: Radius.circular(5),
-                              bottomRight: Radius.circular(5),
+                      child: Form(
+                        key: _formKey,
+                        child: TextFormField(
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Bitte gib einen Titel ein";
+                            }
+
+                            return null;
+                          },
+                          controller: taskTextController,
+                          decoration: const InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(15),
+                                topRight: Radius.circular(5),
+                                bottomLeft: Radius.circular(5),
+                                bottomRight: Radius.circular(5),
+                              ),
                             ),
+                            labelText: "Neues Ziel",
                           ),
-                          labelText: "Neues Ziel",
                         ),
                       ),
                     ),
@@ -74,10 +86,6 @@ class InitAppPageState extends State<InitAppPage> {
                       message: "Zeige/Verberge Tagauswahl",
                       child: InkWell(
                         onTap: () {
-                          if (daySelectorOpened) {
-                            // TODO: Add weekdays
-                          }
-
                           setState(() {
                             daySelectorOpened = !daySelectorOpened;
                           });
@@ -218,6 +226,10 @@ class InitAppPageState extends State<InitAppPage> {
                     Expanded(
                       child: ElevatedButton.icon(
                         onPressed: () {
+                          if (!_formKey.currentState!.validate()) {
+                            return;
+                          }
+
                           goalProvider.put(
                             Goal.create(
                               taskTextController.text,
@@ -268,11 +280,13 @@ class InitAppPageState extends State<InitAppPage> {
                             currentGoal.task,
                             overflow: TextOverflow.ellipsis,
                           ),
-                          subtitle: Text(
-                            currentGoal.description,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
+                          subtitle: currentGoal.description.isNotEmpty
+                              ? Text(
+                                  currentGoal.description,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                )
+                              : null,
                           trailing: IconButton(
                             onPressed: () {
                               showDialog(

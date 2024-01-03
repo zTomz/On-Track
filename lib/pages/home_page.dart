@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:planer/extensions/navigator_extension.dart';
 import 'package:planer/extensions/theme_extension.dart';
+import 'package:planer/models/goal/goal.dart';
 import 'package:planer/pages/widgets/nav_bar.dart';
 import 'package:planer/provider/goal_provider.dart';
 import 'package:provider/provider.dart';
@@ -40,8 +42,9 @@ class _HomePageState extends State<HomePage> {
         children: [
           Expanded(
             child: ListView.builder(
-              itemCount: 25,
+              itemCount: goalProvider.goals.length,
               itemBuilder: (context, index) {
+                final currentGoal = goalProvider.goals[index];
                 final isTileExpanded = expandedIndexes.contains(index);
 
                 return Card(
@@ -50,7 +53,7 @@ class _HomePageState extends State<HomePage> {
                       top: index == 0
                           ? const Radius.circular(20)
                           : const Radius.circular(12),
-                      bottom: index == 24
+                      bottom: index == goalProvider.goals.length - 1
                           ? const Radius.circular(20)
                           : const Radius.circular(12),
                     ),
@@ -67,44 +70,93 @@ class _HomePageState extends State<HomePage> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    "Item $index",
+                                    currentGoal.task,
                                     style: context.textTheme.bodyLarge,
                                   ),
-                                  Text(
-                                    "Description of the item\nDescription of the item Description of the itemDescription of the item\nDescription of the item\n",
-                                    style: context.textTheme.bodySmall,
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
+                                  if (currentGoal.description.isNotEmpty)
+                                    Text(
+                                      currentGoal.description,
+                                      style: context.textTheme.bodySmall,
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
                                 ],
                               ),
                             ),
-                            IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  if (isTileExpanded) {
-                                    expandedIndexes.remove(index);
-                                  } else {
-                                    expandedIndexes.add(index);
-                                  }
-                                });
-                              },
-                              icon: AnimatedRotation(
-                                duration: const Duration(milliseconds: 200),
-                                turns: isTileExpanded ? 0.5 : 1,
-                                child: const Icon(
-                                  Icons.expand_circle_down_rounded,
-                                ),
-                              ),
-                            ),
+                            currentGoal.valueType != GoalValueType.bool
+                                ? IconButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        if (isTileExpanded) {
+                                          expandedIndexes.remove(index);
+                                        } else {
+                                          expandedIndexes.add(index);
+                                        }
+                                      });
+                                    },
+                                    icon: AnimatedRotation(
+                                      duration:
+                                          const Duration(milliseconds: 200),
+                                      turns: isTileExpanded ? 0.5 : 1,
+                                      child: const Icon(
+                                        Icons.expand_circle_down_rounded,
+                                      ),
+                                    ),
+                                  )
+                                : Checkbox(
+                                    value: currentGoal.value as bool? ?? false,
+                                    onChanged: (value) {
+                                      goalProvider.put(
+                                        currentGoal.copyWith(
+                                          value: value ?? false,
+                                        ),
+                                      );
+                                    },
+                                  ),
                           ],
                         ),
                         if (isTileExpanded) ...[
                           const SizedBox(height: 15),
-                          const TextField(
+                          TextField(
+                            onSubmitted: (value) {
+                              if (double.tryParse(value) == null &&
+                                  currentGoal.valueType ==
+                                      GoalValueType.number) {
+                                context.showSnackBar(
+                                  "Der Wert muss eine Zahl sein",
+                                );
+
+                                return;
+                              }
+                              if (currentGoal.valueType ==
+                                  GoalValueType.number) {
+                                goalProvider.put(
+                                  currentGoal.copyWith(
+                                    value: double.parse(value),
+                                  ),
+                                );
+                              } else {
+                                goalProvider.put(
+                                  currentGoal.copyWith(
+                                    value: value,
+                                  ),
+                                );
+                              }
+
+                              context.showSnackBar(
+                                "Wert gespeichert",
+                              );
+                            },
+                            keyboardType:
+                                currentGoal.valueType == GoalValueType.number
+                                    ? TextInputType.number
+                                    : TextInputType.text,
                             decoration: InputDecoration(
-                              border: OutlineInputBorder(),
-                              labelText: "Wert",
+                              border: const OutlineInputBorder(),
+                              labelText: currentGoal.value != null &&
+                                      currentGoal.value.toString().isNotEmpty
+                                  ? "Wert: ${currentGoal.value.toString()}"
+                                  : "Wert - ${currentGoal.valueType == GoalValueType.number ? "Zahl" : "Text"}",
                             ),
                           ),
                         ]

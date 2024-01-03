@@ -8,7 +8,7 @@ class GoalProvider extends ChangeNotifier {
   List<Goal> get goals => _goals.values.toList();
 
   void put(Goal goal) {
-    _goals.putIfAbsent(goal.uuid, () => goal);
+    _goals[goal.uuid] = goal;
 
     notifyListeners();
   }

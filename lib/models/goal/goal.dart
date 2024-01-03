@@ -3,20 +3,18 @@ import 'package:uuid/uuid.dart';
 class Goal {
   final String task;
   final String description;
-  final List<Object> values;
+  final Object? value;
   final GoalValueType valueType;
   final List<int> weekdays;
-  Map<int, bool> finishedDays;
   final DateTime from;
   final String uuid;
 
   Goal({
     required this.task,
     required this.description,
-    required this.values,
+    required this.value,
     required this.valueType,
     required this.weekdays,
-    required this.finishedDays,
     required this.from,
     required this.uuid,
   });
@@ -26,17 +24,36 @@ class Goal {
       : this(
           task: task,
           description: description,
-          values: [],
+          value: null,
           valueType: valueType,
           weekdays: weekdays,
-          finishedDays: Map.fromIterable(weekdays, value: (_) => false),
           from: DateTime.now(),
           uuid: const Uuid().v4(),
         );
 
+  Goal copyWith({
+      String? task,
+      String? description,
+      Object? value,
+      GoalValueType? valueType,
+      List<int>? weekdays,
+      DateTime? from,
+      String? uuid,
+    }) {
+      return Goal(
+        task: task ?? this.task,
+        description: description ?? this.description,
+        value: value ?? this.value,
+        valueType: valueType ?? this.valueType,
+        weekdays: weekdays ?? this.weekdays,
+        from: from ?? this.from,
+        uuid: uuid ?? this.uuid,
+      );
+    }
+
   @override
   String toString() {
-    return 'Goal(task: $task, description: $description, values: $values, valueType: $valueType, weekdays: $weekdays, finishedDays: $finishedDays, from: $from, uuid: $uuid)';
+    return 'Goal(task: $task, description: $description, value: $value, valueType: $valueType, weekdays: $weekdays, from: $from, uuid: $uuid)';
   }
 }
 

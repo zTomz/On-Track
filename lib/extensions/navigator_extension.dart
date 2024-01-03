@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 extension NavigatorExtension on BuildContext {
   NavigatorState get navigator => Navigator.of(this);
+  ScaffoldMessengerState get scaffoldMessenger => ScaffoldMessenger.of(this);
 
   void push(
     Widget page, {
@@ -25,5 +26,18 @@ extension NavigatorExtension on BuildContext {
 
   void pop() {
     navigator.pop();
+  }
+
+  void showSnackBar(String message, {bool clearAllSnackBars = false}) {
+    if (clearAllSnackBars) {
+      scaffoldMessenger.clearSnackBars();
+    }
+
+    scaffoldMessenger.showSnackBar(
+      SnackBar(
+        content: Text(message),
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
   }
 }
