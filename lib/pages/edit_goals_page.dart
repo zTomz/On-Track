@@ -4,7 +4,7 @@ import 'package:planer/constants/colors.dart';
 import 'package:planer/extensions/navigator_extension.dart';
 import 'package:planer/extensions/theme_extension.dart';
 import 'package:planer/models/goal/goal.dart';
-import 'package:planer/models/goal/weekday.dart';
+import 'package:planer/models/weekday.dart';
 import 'package:planer/pages/home_page.dart';
 import 'package:planer/provider/goal_provider.dart';
 import 'package:provider/provider.dart';
@@ -226,12 +226,12 @@ class EditGoalsPageState extends State<EditGoalsPage> {
                   children: [
                     Expanded(
                       child: ElevatedButton.icon(
-                        onPressed: () {
+                        onPressed: () async {
                           if (!_formKey.currentState!.validate()) {
                             return;
                           }
 
-                          goalProvider.putGoal(
+                          await goalProvider.putGoal(
                             Goal.create(
                               taskTextController.text,
                               descriptionTextController.text,

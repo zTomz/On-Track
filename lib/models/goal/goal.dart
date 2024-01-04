@@ -1,12 +1,36 @@
+import 'package:hive/hive.dart';
 import 'package:uuid/uuid.dart';
 
+part 'goal.g.dart';
+
+@HiveType(typeId: 0)
 class Goal {
+  /// The task field stores the name of the goal.
+  @HiveField(0)
   final String task;
+
+  /// The description field stores a longer description of the goal.
+  @HiveField(1)
   final String description;
+
+  /// The value field stores a numeric value associated with the goal.
+  @HiveField(2)
   final Object? value;
+
+  /// The valueType field indicates whether the value is a duration, count, etc.
+  @HiveField(3)
   final GoalValueType valueType;
+
+  /// The weekdays field stores which days of the week the goal applies to.
+  @HiveField(4)
   final List<int> weekdays;
+
+  /// The from field stores when the goal was created.
+  @HiveField(5)
   final DateTime from;
+
+  /// The uuid field stores a unique ID for the goal.
+  @HiveField(6)
   final String uuid;
 
   Goal({
@@ -32,24 +56,24 @@ class Goal {
         );
 
   Goal copyWith({
-      String? task,
-      String? description,
-      Object? value,
-      GoalValueType? valueType,
-      List<int>? weekdays,
-      DateTime? from,
-      String? uuid,
-    }) {
-      return Goal(
-        task: task ?? this.task,
-        description: description ?? this.description,
-        value: value ?? this.value,
-        valueType: valueType ?? this.valueType,
-        weekdays: weekdays ?? this.weekdays,
-        from: from ?? this.from,
-        uuid: uuid ?? this.uuid,
-      );
-    }
+    String? task,
+    String? description,
+    Object? value,
+    GoalValueType? valueType,
+    List<int>? weekdays,
+    DateTime? from,
+    String? uuid,
+  }) {
+    return Goal(
+      task: task ?? this.task,
+      description: description ?? this.description,
+      value: value ?? this.value,
+      valueType: valueType ?? this.valueType,
+      weekdays: weekdays ?? this.weekdays,
+      from: from ?? this.from,
+      uuid: uuid ?? this.uuid,
+    );
+  }
 
   @override
   String toString() {
@@ -57,8 +81,12 @@ class Goal {
   }
 }
 
+@HiveType(typeId: 1)
 enum GoalValueType {
+  @HiveField(0)
   text,
+  @HiveField(1)
   number,
+  @HiveField(2)
   bool,
 }

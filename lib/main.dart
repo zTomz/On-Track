@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:planer/constants/colors.dart';
 import 'package:planer/models/goal/goal.dart';
 import 'package:planer/pages/home_page.dart';
@@ -6,57 +7,20 @@ import 'package:planer/provider/goal_provider.dart';
 import 'package:planer/provider/settings_provider.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Hive.initFlutter();
+  Hive.registerAdapter(GoalAdapter(), override: true);
+  Hive.registerAdapter(GoalValueTypeAdapter(), override: true);
+  await Hive.openBox<List>("daysBox");
+  await Hive.openBox<Goal>("allGoalsBox");
+
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (_) => GoalProvider(
-            goals: [
-              Goal.create(
-                "Test 1",
-                "",
-                GoalValueType.number,
-                [
-                  1,
-                  2,
-                  3,
-                  4,
-                  5,
-                  6,
-                  7,
-                ],
-              ),
-              Goal.create(
-                "Test 2",
-                "",
-                GoalValueType.bool,
-                [
-                  1,
-                  2,
-                  3,
-                  4,
-                  5,
-                  6,
-                  7,
-                ],
-              ),
-              Goal.create(
-                "Test 3",
-                "",
-                GoalValueType.text,
-                [
-                  1,
-                  2,
-                  3,
-                  4,
-                  5,
-                  6,
-                  7,
-                ],
-              ),
-            ],
-          ),
+          create: (_) => GoalProvider(),
         ),
         ChangeNotifierProvider(
           create: (_) => SettingsProvider(),

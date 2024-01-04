@@ -25,13 +25,69 @@ class _HomePageState extends State<HomePage> {
         title: Text(goalProvider.extractDay(goalProvider.selectedDay)),
         centerTitle: true,
         leading: IconButton(
-          onPressed: () {},
+          onPressed: () {
+            DateTime newDay;
+
+            if (goalProvider.selectedDay.day - 1 < 1) {
+              if (goalProvider.selectedDay.month == 1) {
+                newDay = DateTime(
+                  goalProvider.selectedDay.year - 1,
+                  goalProvider.selectedDay.month,
+                  goalProvider.selectedDay.day,
+                );
+              } else {
+                newDay = DateTime(
+                  goalProvider.selectedDay.year,
+                  goalProvider.selectedDay.month - 1,
+                  goalProvider.selectedDay.day,
+                );
+              }
+            } else {
+              newDay = DateTime(
+                goalProvider.selectedDay.year,
+                goalProvider.selectedDay.month,
+                goalProvider.selectedDay.day - 1,
+              );
+            }
+
+            if (goalProvider.dayExists(newDay)) {
+              goalProvider.selectedDay = newDay;
+            }
+          },
           tooltip: "Vorheriger Tag",
           icon: const Icon(Icons.arrow_back_ios_rounded),
         ),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              DateTime newDay;
+
+              if (goalProvider.selectedDay.day + 1 > 31) {
+                if (goalProvider.selectedDay.month == 12) {
+                  newDay = DateTime(
+                    goalProvider.selectedDay.year + 1,
+                    goalProvider.selectedDay.month,
+                    goalProvider.selectedDay.day,
+                  );
+                } else {
+                  newDay = DateTime(
+                    goalProvider.selectedDay.year,
+                    goalProvider.selectedDay.month + 1,
+                    goalProvider.selectedDay.day,
+                  );
+                }
+              } else {
+                newDay = DateTime(
+                  goalProvider.selectedDay.year,
+                  goalProvider.selectedDay.month,
+                  goalProvider.selectedDay.day + 1,
+                );
+              }
+
+              if (goalProvider.dayExists(newDay)) {
+                goalProvider.selectedDay = newDay;
+              }
+            },
             tooltip: "Nächster Tag",
             icon: const Icon(Icons.arrow_forward_ios_rounded),
           ),
@@ -105,8 +161,9 @@ class _HomePageState extends State<HomePage> {
                                   )
                                 : Checkbox(
                                     value: currentGoal.value as bool? ?? false,
-                                    onChanged: (value) {
-                                      goalProvider.putGoal(
+                                    onChanged: (value) async {
+                                      await goalProvider.updateGoal(
+                                        goalProvider.selectedDay,
                                         currentGoal.copyWith(
                                           value: value ?? false,
                                         ),
@@ -118,7 +175,7 @@ class _HomePageState extends State<HomePage> {
                         if (isTileExpanded) ...[
                           const SizedBox(height: 15),
                           TextField(
-                            onSubmitted: (value) {
+                            onSubmitted: (value) async {
                               if (double.tryParse(value) == null &&
                                   currentGoal.valueType ==
                                       GoalValueType.number) {
@@ -131,22 +188,26 @@ class _HomePageState extends State<HomePage> {
 
                               if (currentGoal.valueType ==
                                   GoalValueType.number) {
-                                goalProvider.putGoal(
+                                await goalProvider.updateGoal(
+                                  goalProvider.selectedDay,
                                   currentGoal.copyWith(
                                     value: double.parse(value),
                                   ),
                                 );
                               } else {
-                                goalProvider.putGoal(
+                                await goalProvider.updateGoal(
+                                  goalProvider.selectedDay,
                                   currentGoal.copyWith(
                                     value: value,
                                   ),
                                 );
                               }
 
-                              context.showSnackBar(
-                                "Wert gespeichert",
-                              );
+                              if (context.mounted) {
+                                context.showSnackBar(
+                                  "Wert gespeichert",
+                                );
+                              }
                             },
                             keyboardType:
                                 currentGoal.valueType == GoalValueType.number

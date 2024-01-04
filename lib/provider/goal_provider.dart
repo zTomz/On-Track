@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:planer/models/goal/goal.dart';
+import 'package:planer/models/storage.dart';
 
 class GoalProvider extends ChangeNotifier {
-  GoalProvider({List<Goal>? goals}) {
-    if (goals == null) {
-      return;
-    }
-
-    for (Goal goal in goals) {
-      _allGoals[goal.uuid] = goal;
-    }
+  GoalProvider() {
+    _days = Storage.loadDays();
+    _allGoals = Storage.loadGoals();
 
     if (!_days.containsKey(extractDay(DateTime.now()))) {
       addDay(DateTime.now(), notify: false);
@@ -20,7 +16,17 @@ class GoalProvider extends ChangeNotifier {
   Map<String, Map<String, Goal>> _days = {};
   // ignore: prefer_final_fields
   Map<String, Goal> _allGoals = {};
-  DateTime selectedDay = DateTime.now();
+
+  DateTime _selectedDay = DateTime.now();
+  DateTime get selectedDay => _selectedDay;
+  set selectedDay(DateTime newSelectedDay) {
+    // Assuming _selectedDay is the field that holds the selected day.
+    if (_selectedDay != newSelectedDay) {
+      _selectedDay = newSelectedDay;
+      // Notify listeners if there is a change to the selected day.
+      notifyListeners();
+    }
+  }
 
   List<Goal> get goalsOfDay =>
       _days[extractDay(selectedDay)]?.values.toList() ?? [];
@@ -34,41 +40,79 @@ class GoalProvider extends ChangeNotifier {
     return _days.containsKey(extractDay(day));
   }
 
-  void printDays() {
-    print(_days);
-  }
-
   /// Add a goal
-  void putGoal(Goal goal, {bool notify = true}) {
+  Future<void> putGoal(Goal goal, {bool notify = true}) async {
     _allGoals[goal.uuid] = goal;
 
     if (goal.weekdays.contains(DateTime.now().weekday)) {
-      _days.removeWhere((key, value) => key == extractDay(DateTime.now()));
-      addDay(DateTime.now());
+      updateGoal(DateTime.now(), goal, notify: false);
     }
+
+    await Storage.saveDays(_days);
+    await Storage.saveGoals(_allGoals);
 
     if (notify) {
       notifyListeners();
     }
   }
 
-  void removeGoal(Goal goal) {
+  /// Updates a goal from a day
+  Future<void> updateGoal(
+    DateTime day,
+    Goal goal, {
+    bool notify = true,
+  }) async {
+    // If the day doesn't exist, nothing can be updatet
+    if (!_days.containsKey(extractDay(day))) {
+      return;
+    }
+
+    // Update the goal
+    _days[extractDay(day)]![goal.uuid] = goal;
+
+    // Save all days, goals havn't changed so we don't need to save them
+    await Storage.saveDays(_days);
+
+    if (notify) {
+      notifyListeners();
+    }
+  }
+
+  Future<void> removeGoal(Goal goal) async {
     _allGoals.removeWhere((key, value) => key == goal.uuid);
+
+    if (goal.weekdays.contains(DateTime.now().weekday) &&
+        dayExists(DateTime.now())) {
+      _days[extractDay(DateTime.now())]!
+          .removeWhere((key, value) => key == goal.uuid);
+    }
+
+    await Storage.saveDays(_days);
+    await Storage.saveGoals(_allGoals);
 
     notifyListeners();
   }
 
-  void addDay(DateTime day, {bool notify = true}) {
+  Future<void> addDay(DateTime day, {bool notify = true}) async {
     final goalsOfDay = _allGoals.values
         .where((element) => element.weekdays.contains(day.weekday))
         .toList();
+
+    print("Goals of day: $goalsOfDay");
+    print("Weekday: ${day.weekday}");
+    print("Day: ${day.day}");
+    print("All goals: $_allGoals");
 
     Map<String, Goal> goals = {};
     for (Goal goal in goalsOfDay) {
       goals[goal.uuid] = goal;
     }
 
+    print("Goals: $goals");
+
     _days[extractDay(day)] = goals;
+
+    await Storage.saveDays(_days);
 
     if (notify) {
       notifyListeners();
