@@ -25,70 +25,32 @@ class _HomePageState extends State<HomePage> {
         title: Text(goalProvider.extractDay(goalProvider.selectedDay)),
         centerTitle: true,
         leading: IconButton(
-          onPressed: () {
-            DateTime newDay;
-
-            if (goalProvider.selectedDay.day - 1 < 1) {
-              if (goalProvider.selectedDay.month == 1) {
-                newDay = DateTime(
-                  goalProvider.selectedDay.year - 1,
-                  goalProvider.selectedDay.month,
-                  goalProvider.selectedDay.day,
-                );
-              } else {
-                newDay = DateTime(
-                  goalProvider.selectedDay.year,
-                  goalProvider.selectedDay.month - 1,
-                  goalProvider.selectedDay.day,
-                );
-              }
-            } else {
-              newDay = DateTime(
-                goalProvider.selectedDay.year,
-                goalProvider.selectedDay.month,
-                goalProvider.selectedDay.day - 1,
-              );
-            }
-
-            if (goalProvider.dayExists(newDay)) {
-              goalProvider.selectedDay = newDay;
-            }
-          },
+          onPressed: goalProvider.dayExists(
+                  goalProvider.selectedDay.subtract(const Duration(days: 1)))
+              ? () {
+                  goalProvider.dayBack();
+                }
+              : null,
+          color: goalProvider.dayExists(
+                  goalProvider.selectedDay.subtract(const Duration(days: 1)))
+              ? null
+              : Colors.grey,
           tooltip: "Vorheriger Tag",
           icon: const Icon(Icons.arrow_back_ios_rounded),
         ),
         actions: [
           IconButton(
-            onPressed: () {
-              DateTime newDay;
-
-              if (goalProvider.selectedDay.day + 1 > 31) {
-                if (goalProvider.selectedDay.month == 12) {
-                  newDay = DateTime(
-                    goalProvider.selectedDay.year + 1,
-                    goalProvider.selectedDay.month,
-                    goalProvider.selectedDay.day,
-                  );
-                } else {
-                  newDay = DateTime(
-                    goalProvider.selectedDay.year,
-                    goalProvider.selectedDay.month + 1,
-                    goalProvider.selectedDay.day,
-                  );
-                }
-              } else {
-                newDay = DateTime(
-                  goalProvider.selectedDay.year,
-                  goalProvider.selectedDay.month,
-                  goalProvider.selectedDay.day + 1,
-                );
-              }
-
-              if (goalProvider.dayExists(newDay)) {
-                goalProvider.selectedDay = newDay;
-              }
-            },
+            onPressed: goalProvider.dayExists(
+                    goalProvider.selectedDay.add(const Duration(days: 1)))
+                ? () {
+                    goalProvider.dayForward();
+                  }
+                : null,
             tooltip: "Nächster Tag",
+            color: goalProvider.dayExists(
+                    goalProvider.selectedDay.add(const Duration(days: 1)))
+                ? null
+                : Colors.grey,
             icon: const Icon(Icons.arrow_forward_ios_rounded),
           ),
         ],

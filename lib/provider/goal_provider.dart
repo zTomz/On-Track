@@ -7,6 +7,18 @@ class GoalProvider extends ChangeNotifier {
     _days = Storage.loadDays();
     _allGoals = Storage.loadGoals();
 
+    final dayBefore = DateTime(
+      DateTime.now().year,
+      DateTime.now().month,
+      DateTime.now().day - 1,
+    );
+    if (!dayExists(dayBefore)) {
+      addDay(
+        dayBefore,
+        notify: false,
+      );
+    }
+
     if (!_days.containsKey(extractDay(DateTime.now()))) {
       addDay(DateTime.now(), notify: false);
     }
@@ -38,6 +50,34 @@ class GoalProvider extends ChangeNotifier {
   /// Checks if a day exists
   bool dayExists(DateTime day) {
     return _days.containsKey(extractDay(day));
+  }
+
+  /// Checks if the day before `selectedDay` exists and changes if
+  /// it does
+  void dayBack() {
+    if (dayExists(
+      selectedDay.subtract(
+        const Duration(days: 1),
+      ),
+    )) {
+      selectedDay = selectedDay.subtract(
+        const Duration(days: 1),
+      );
+    }
+  }
+
+  /// Checks if the next day exists and changes if
+  /// it does
+  void dayForward() {
+    if (dayExists(
+      selectedDay.add(
+        const Duration(days: 1),
+      ),
+    )) {
+      selectedDay = selectedDay.add(
+        const Duration(days: 1),
+      );
+    }
   }
 
   /// Add a goal
