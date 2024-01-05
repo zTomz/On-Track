@@ -16,6 +16,8 @@ class GoalProvider extends ChangeNotifier {
   Map<String, Map<String, Goal>> _days = {};
   // ignore: prefer_final_fields
   Map<String, Goal> _allGoals = {};
+  // ignore: prefer_final_fields
+  Map<String, List<int>> _expandedIndexes = {};
 
   DateTime _selectedDay = DateTime.now();
   DateTime get selectedDay => _selectedDay;
@@ -31,6 +33,9 @@ class GoalProvider extends ChangeNotifier {
   List<Goal> get goalsOfDay =>
       _days[extractDay(selectedDay)]?.values.toList() ?? [];
   List<Goal> get allGoals => _allGoals.values.toList();
+
+  List<int> get expandedIndexes =>
+      _expandedIndexes[extractDay(selectedDay)] ?? [];
 
   /// Extract the given day to "Day.Month.Year"
   String extractDay(DateTime day) => "${day.day}.${day.month}.${day.year}";
@@ -68,6 +73,25 @@ class GoalProvider extends ChangeNotifier {
     }
   }
 
+  /// Method for toggeling the expansion of tiles
+  void toggleExpansion(int index) {
+    // Check if the current day has expanded indexes, if not
+    // add the day
+    if (!_expandedIndexes.containsKey(extractDay(selectedDay))) {
+      _expandedIndexes[extractDay(selectedDay)] = [];
+    }
+
+    // Toggle the index
+    if (expandedIndexes.contains(index)) {
+      _expandedIndexes[extractDay(selectedDay)]!.remove(index);
+    } else {
+      _expandedIndexes[extractDay(selectedDay)]!.add(index);
+    }
+
+    notifyListeners();
+  }
+
+  /// Reset all data in the provider
   void reset() {
     _days = {};
     _allGoals = {};

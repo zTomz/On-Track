@@ -2,67 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:planer/extensions/navigator_extension.dart';
 import 'package:planer/extensions/theme_extension.dart';
 import 'package:planer/models/goal/goal.dart';
+import 'package:planer/pages/widgets/day_app_bar.dart';
 import 'package:planer/pages/widgets/nav_bar.dart';
 import 'package:planer/provider/goal_provider.dart';
 import 'package:provider/provider.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends StatelessWidget {
   const HomePage({super.key});
-
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  List<int> expandedIndexes = [];
 
   @override
   Widget build(BuildContext context) {
     final goalProvider = context.watch<GoalProvider>();
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(goalProvider.extractDay(goalProvider.selectedDay)),
-        centerTitle: true,
-        leading: IconButton(
-          onPressed: goalProvider.dayExists(
-                  goalProvider.selectedDay.subtract(const Duration(days: 1)))
-              ? () {
-                  goalProvider.dayBack();
-                  // Close all expanded tiles
-                  setState(() {
-                    expandedIndexes = [];
-                  });
-                }
-              : null,
-          color: goalProvider.dayExists(
-                  goalProvider.selectedDay.subtract(const Duration(days: 1)))
-              ? null
-              : Colors.grey,
-          tooltip: "Vorheriger Tag",
-          icon: const Icon(Icons.arrow_back_ios_rounded),
-        ),
-        actions: [
-          IconButton(
-            onPressed: goalProvider.dayExists(
-                    goalProvider.selectedDay.add(const Duration(days: 1)))
-                ? () {
-                    goalProvider.dayForward();
-                    // Close all expanded tiles
-                    setState(() {
-                      expandedIndexes = [];
-                    });
-                  }
-                : null,
-            tooltip: "Nächster Tag",
-            color: goalProvider.dayExists(
-                    goalProvider.selectedDay.add(const Duration(days: 1)))
-                ? null
-                : Colors.grey,
-            icon: const Icon(Icons.arrow_forward_ios_rounded),
-          ),
-        ],
-      ),
+      appBar: const DayAppBar(),
       bottomNavigationBar: const NavBar(currentPage: 1),
       body: Column(
         children: [
@@ -71,7 +24,9 @@ class _HomePageState extends State<HomePage> {
               itemCount: goalProvider.goalsOfDay.length,
               itemBuilder: (context, index) {
                 final currentGoal = goalProvider.goalsOfDay[index];
-                final isTileExpanded = expandedIndexes.contains(index);
+                final isTileExpanded = goalProvider.expandedIndexes.contains(
+                  index,
+                );
 
                 return Card(
                   shape: RoundedRectangleBorder(
@@ -112,13 +67,7 @@ class _HomePageState extends State<HomePage> {
                             currentGoal.valueType != GoalValueType.bool
                                 ? IconButton(
                                     onPressed: () {
-                                      setState(() {
-                                        if (isTileExpanded) {
-                                          expandedIndexes.remove(index);
-                                        } else {
-                                          expandedIndexes.add(index);
-                                        }
-                                      });
+                                      goalProvider.toggleExpansion(index);
                                     },
                                     icon: AnimatedRotation(
                                       duration:
