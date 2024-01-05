@@ -240,6 +240,8 @@ class EditGoalsPageState extends State<EditGoalsPage> {
                             ),
                           );
 
+                          goalProvider.resetExpandedTiles();
+
                           setState(() {
                             // Reset the selected data
                             selectedWeekdays = [1, 2, 3, 4, 5, 6, 7];

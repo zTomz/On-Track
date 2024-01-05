@@ -22,6 +22,7 @@ class DayAppBar extends StatelessWidget implements PreferredSizeWidget {
                 goalProvider.selectedDay.subtract(const Duration(days: 1)))
             ? () {
                 goalProvider.dayBack();
+                goalProvider.resetExpandedTiles();
               }
             : null,
         color: goalProvider.dayExists(
@@ -37,6 +38,7 @@ class DayAppBar extends StatelessWidget implements PreferredSizeWidget {
                   goalProvider.selectedDay.add(const Duration(days: 1)))
               ? () {
                   goalProvider.dayForward();
+                  goalProvider.resetExpandedTiles();
                 }
               : null,
           tooltip: "Nächster Tag",
