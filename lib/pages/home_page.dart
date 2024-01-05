@@ -29,6 +29,10 @@ class _HomePageState extends State<HomePage> {
                   goalProvider.selectedDay.subtract(const Duration(days: 1)))
               ? () {
                   goalProvider.dayBack();
+                  // Close all expanded tiles
+                  setState(() {
+                    expandedIndexes = [];
+                  });
                 }
               : null,
           color: goalProvider.dayExists(
@@ -44,6 +48,10 @@ class _HomePageState extends State<HomePage> {
                     goalProvider.selectedDay.add(const Duration(days: 1)))
                 ? () {
                     goalProvider.dayForward();
+                    // Close all expanded tiles
+                    setState(() {
+                      expandedIndexes = [];
+                    });
                   }
                 : null,
             tooltip: "Nächster Tag",

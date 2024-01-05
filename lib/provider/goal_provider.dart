@@ -7,18 +7,6 @@ class GoalProvider extends ChangeNotifier {
     _days = Storage.loadDays();
     _allGoals = Storage.loadGoals();
 
-    final dayBefore = DateTime(
-      DateTime.now().year,
-      DateTime.now().month,
-      DateTime.now().day - 1,
-    );
-    if (!dayExists(dayBefore)) {
-      addDay(
-        dayBefore,
-        notify: false,
-      );
-    }
-
     if (!_days.containsKey(extractDay(DateTime.now()))) {
       addDay(DateTime.now(), notify: false);
     }
@@ -80,6 +68,16 @@ class GoalProvider extends ChangeNotifier {
     }
   }
 
+  void reset() {
+    _days = {};
+    _allGoals = {};
+
+    _selectedDay = DateTime.now();
+    addDay(DateTime.now(), notify: false);
+
+    notifyListeners();
+  }
+
   /// Add a goal
   Future<void> putGoal(Goal goal, {bool notify = true}) async {
     _allGoals[goal.uuid] = goal;
@@ -138,17 +136,10 @@ class GoalProvider extends ChangeNotifier {
         .where((element) => element.weekdays.contains(day.weekday))
         .toList();
 
-    print("Goals of day: $goalsOfDay");
-    print("Weekday: ${day.weekday}");
-    print("Day: ${day.day}");
-    print("All goals: $_allGoals");
-
     Map<String, Goal> goals = {};
     for (Goal goal in goalsOfDay) {
       goals[goal.uuid] = goal;
     }
-
-    print("Goals: $goals");
 
     _days[extractDay(day)] = goals;
 

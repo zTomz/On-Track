@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:planer/extensions/navigator_extension.dart';
+import 'package:planer/models/storage/boxes.dart';
 import 'package:planer/pages/edit_goals_page.dart';
 import 'package:planer/pages/settings/widgets/settings_section.dart';
 import 'package:planer/pages/widgets/nav_bar.dart';
+import 'package:planer/provider/goal_provider.dart';
 import 'package:planer/provider/settings_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -100,6 +102,55 @@ class _SettingsPageState extends State<SettingsPage> {
                               );
                             },
                           ).toList(),
+                        );
+                      },
+                    );
+                  },
+                ),
+              ],
+            ),
+            SettingsSection(
+              title: "Speicher",
+              children: [
+                ListTile(
+                  title: const Text("Alle Daten löschen"),
+                  leading: const Icon(Icons.delete_forever_rounded),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (_) {
+                        return AlertDialog(
+                          title: const Text("Sind Sie sicher?"),
+                          content: const Text(
+                            "Sind Sie sicher, dass alle Daten gelöscht werden sollen?",
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                context.pop();
+                              },
+                              child: const Text("Abbrechen"),
+                            ),
+                            TextButton(
+                              onPressed: () async {
+                                await Boxes.allGoalsBox.clear();
+                                await Boxes.daysBox.clear();
+
+                                if (context.mounted) {
+                                  context.read<GoalProvider>().reset();
+
+                                  context.showSnackBar(
+                                    "Alle Daten wurden gelöscht.",
+                                  );
+                                  context.pop();
+                                }
+                              },
+                              child: const Text("Alles löschen"),
+                            ),
+                          ],
                         );
                       },
                     );

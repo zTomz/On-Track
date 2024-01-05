@@ -19,7 +19,7 @@ class SettingsSection extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Einstellungen",
+            title,
             style: context.textTheme.bodySmall!.copyWith(
               color: context.colorScheme.outline,
             ),
