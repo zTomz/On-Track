@@ -71,10 +71,10 @@ class _SettingsPageState extends State<SettingsPage> {
                             ThemeMode.dark,
                             ThemeMode.system,
                           ].map(
-                            (e) {
+                            (currentTheme) {
                               String text = "";
 
-                              switch (e) {
+                              switch (currentTheme) {
                                 case ThemeMode.light:
                                   text = "Hell";
                                   break;
@@ -86,19 +86,26 @@ class _SettingsPageState extends State<SettingsPage> {
                                   break;
                               }
 
-                              return Row(
-                                children: [
-                                  Radio(
-                                    value: e,
-                                    groupValue: settingsProvider.themeMode,
-                                    onChanged: (newThemeMode) {
-                                      settingsProvider.setThemeMode(
-                                        newThemeMode ?? ThemeMode.system,
-                                      );
-                                    },
+                              return RadioListTile(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.vertical(
+                                    top: Radius.circular(
+                                      currentTheme == ThemeMode.light ? 15 : 5,
+                                    ),
+                                    bottom: Radius.circular(
+                                      currentTheme == ThemeMode.system ? 15 : 5,
+                                    ),
                                   ),
-                                  Text(text),
-                                ],
+                                ),
+                                value: currentTheme,
+                                groupValue: settingsProvider.themeMode,
+                                onChanged: (newThemeMode) {
+                                  settingsProvider.setThemeMode(
+                                    newThemeMode ?? ThemeMode.system,
+                                  );
+                                  context.pop();
+                                },
+                                title: Text(text),
                               );
                             },
                           ).toList(),
