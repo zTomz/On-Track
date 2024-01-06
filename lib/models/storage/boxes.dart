@@ -6,6 +6,7 @@ import 'package:planer/models/goal/goal.dart';
 class Boxes {
   static final daysBox = Hive.box<List>("daysBox");
   static final allGoalsBox = Hive.box<Goal>("allGoalsBox");
+  static final settingsBox = Hive.box("settingsBox");
 
   const Boxes();
 }

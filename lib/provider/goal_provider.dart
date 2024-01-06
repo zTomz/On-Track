@@ -215,9 +215,6 @@ class GoalProvider extends ChangeNotifier {
       }
     }
 
-    print("Goals to use: $goalsToUse");
-    print("Goals to use length: ${goalsToUse.length}");
-
     for (Goal goal in goalsToUse) {
       // If data for this goal does not exist, create it
       if (!data.containsKey(goal.task)) {

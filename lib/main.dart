@@ -11,10 +11,13 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Hive.initFlutter();
+
   Hive.registerAdapter(GoalAdapter(), override: true);
   Hive.registerAdapter(GoalValueTypeAdapter(), override: true);
+
   await Hive.openBox<List>("daysBox");
   await Hive.openBox<Goal>("allGoalsBox");
+  await Hive.openBox("settingsBox");
 
   runApp(
     MultiProvider(

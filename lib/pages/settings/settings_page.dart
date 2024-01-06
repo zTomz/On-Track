@@ -99,11 +99,14 @@ class _SettingsPageState extends State<SettingsPage> {
                                 ),
                                 value: currentTheme,
                                 groupValue: settingsProvider.themeMode,
-                                onChanged: (newThemeMode) {
-                                  settingsProvider.setThemeMode(
+                                onChanged: (newThemeMode) async {
+                                  await settingsProvider.setThemeMode(
                                     newThemeMode ?? ThemeMode.system,
                                   );
-                                  context.pop();
+
+                                  if (context.mounted) {
+                                    context.pop();
+                                  }
                                 },
                                 title: Text(text),
                               );

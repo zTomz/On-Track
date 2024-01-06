@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:planer/models/goal/goal.dart';
 import 'package:planer/models/storage/boxes.dart';
 
@@ -51,4 +52,11 @@ class Storage {
 
     return goals;
   }
+
+  static Future<void> saveThemeMode(ThemeMode themeMode) async {
+    await Boxes.settingsBox.put("themeMode", themeMode.index);
+  }
+
+  static ThemeMode loadThemeMode() =>
+      ThemeMode.values[Boxes.settingsBox.get("themeMode") ?? 0];
 }
