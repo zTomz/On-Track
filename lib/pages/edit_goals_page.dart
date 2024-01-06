@@ -40,13 +40,15 @@ class EditGoalsPageState extends State<EditGoalsPage> {
         title: const Text('Ziele ändern'),
         automaticallyImplyLeading: false,
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          context.push(const HomePage());
-        },
-        icon: const Icon(Icons.arrow_forward_rounded),
-        label: const Text("Speichern"),
-      ),
+      floatingActionButton: MediaQuery.of(context).viewInsets.bottom > 0
+          ? null
+          : FloatingActionButton.extended(
+              onPressed: () {
+                context.push(const HomePage());
+              },
+              icon: const Icon(Icons.arrow_forward_rounded),
+              label: const Text("Speichern"),
+            ),
       body: Column(
         children: [
           const SizedBox(height: 10),
@@ -308,10 +310,14 @@ class EditGoalsPageState extends State<EditGoalsPage> {
                                         child: const Text("Abbrechen"),
                                       ),
                                       TextButton(
-                                        onPressed: () {
-                                          goalProvider.removeGoal(currentGoal);
+                                        onPressed: () async {
+                                          await goalProvider.removeGoal(
+                                            currentGoal,
+                                          );
 
-                                          Navigator.pop(context);
+                                          if (context.mounted) {
+                                            context.pop();
+                                          }
                                         },
                                         child: const Text("Löschen"),
                                       ),
