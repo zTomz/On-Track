@@ -6,7 +6,6 @@ import 'package:ontrack/extensions/theme_extension.dart';
 import 'package:ontrack/pages/widgets/nav_bar.dart';
 import 'package:ontrack/provider/goal_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:ontrack/extensions/date_time_extension.dart';
 
 class DataPage extends StatelessWidget {
   const DataPage({super.key});
@@ -15,34 +14,32 @@ class DataPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final goalProvider = context.watch<GoalProvider>();
 
-    final boolDataForMonth =
-        goalProvider.getBoolDataForMonth(goalProvider.selectedMonth);
+    final lineChartData = goalProvider.getLineChartDataForWeek(
+      goalProvider.selectedWeek,
+    );
+    final boolDataForMonth = goalProvider.getBoolDataForWeek(
+      goalProvider.selectedWeek,
+    );
 
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          goalProvider.extractMonth(goalProvider.selectedMonth),
-        ),
+            "${goalProvider.extractDay(goalProvider.selectedWeek)} - ${goalProvider.extractDay(goalProvider.selectedWeek.add(const Duration(days: 6)))}"),
         automaticallyImplyLeading: false,
         centerTitle: true,
         leading: IconButton(
           onPressed: () {
-            goalProvider.changeSelectedMonth(-1);
+            goalProvider.changeSelectedWeek(-1);
           },
-          tooltip: "Vorheriger Monat",
+          tooltip: "Vorheriger Woche",
           icon: const Icon(Icons.arrow_back_ios_rounded),
         ),
         actions: [
           IconButton(
-            onPressed: goalProvider.selectedMonth.nextMonthIsAvailable
-                ? null
-                : () {
-                    goalProvider.changeSelectedMonth(1);
-                  },
-            color: goalProvider.selectedMonth.nextMonthIsAvailable
-                ? Colors.grey
-                : null,
-            tooltip: "Nächster Monat",
+            onPressed: () {
+              goalProvider.changeSelectedWeek(1);
+            },
+            tooltip: "Nächster Woche",
             icon: const Icon(Icons.arrow_forward_ios_rounded),
           ),
         ],
@@ -53,9 +50,10 @@ class DataPage extends StatelessWidget {
           Expanded(
             flex: 6,
             child: Padding(
-              padding: const EdgeInsets.only(top: 52, right: 16),
+              padding: const EdgeInsets.only(top: 80, right: 20, left: 16),
               child: LineChart(
                 LineChartData(
+                  showingTooltipIndicators: [],
                   titlesData: FlTitlesData(
                     show: true,
                     bottomTitles: AxisTitles(
@@ -83,19 +81,16 @@ class DataPage extends StatelessWidget {
                     show: true,
                     border: Border.all(color: const Color(0xff37434d)),
                   ),
-                  lineBarsData: goalProvider
-                      .getLineChartDataForMonth(goalProvider.selectedMonth)
-                      .keys
+                  lineBarsData: lineChartData.keys
                       .map(
                         (group) => LineChartBarData(
-                          color: Colors.primaries[
-                              Random().nextInt(Colors.primaries.length)],
+                          color: Colors.primaries[Random().nextInt(
+                            Colors.primaries.length,
+                          )],
                           barWidth: 6,
                           isStrokeCapRound: true,
                           isStrokeJoinRound: true,
-                          spots: goalProvider.getLineChartDataForMonth(
-                            goalProvider.selectedMonth,
-                          )[group]!,
+                          spots: lineChartData[group]!,
                         ),
                       )
                       .toList(),

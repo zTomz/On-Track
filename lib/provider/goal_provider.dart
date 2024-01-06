@@ -26,8 +26,15 @@ class GoalProvider extends ChangeNotifier {
   Map<String, Goal> _allGoals = {};
   // ignore: prefer_final_fields
   List<int> _expandedIndexes = [];
+
+  /// First day of the selected week, initially set to the first
+  /// day of the current week
   // ignore: prefer_final_fields
-  DateTime _selectedMonth = DateTime.now();
+  DateTime _selectedWeek = DateTime.now().subtract(
+    Duration(
+      days: DateTime.now().weekday - 1,
+    ),
+  );
 
   DateTime _selectedDay = DateTime.now();
   DateTime get selectedDay => _selectedDay;
@@ -46,11 +53,11 @@ class GoalProvider extends ChangeNotifier {
 
   List<int> get expandedIndexes => _expandedIndexes;
 
-  DateTime get selectedMonth => _selectedMonth;
-  set selectedMonth(DateTime newSelectedMonth) {
-    // Assuming _selectedMonth is the field that holds the selected month.
-    if (_selectedMonth != newSelectedMonth) {
-      _selectedMonth = newSelectedMonth;
+  DateTime get selectedWeek => _selectedWeek;
+  set selectedWeek(DateTime newselectedWeek) {
+    // Assuming _selectedWeek is the field that holds the selected month.
+    if (_selectedWeek != newselectedWeek) {
+      _selectedWeek = newselectedWeek;
       // Notify listeners if there is a change to the selected month.
       notifyListeners();
     }
@@ -108,28 +115,24 @@ class GoalProvider extends ChangeNotifier {
   /// Changes the selected month by the given months.
   /// If the given months are smaller 0, they got subtracted
   /// else added
-  void changeSelectedMonth(int months) {
-    for (int i = 0; i < months.abs(); i++) {
-      if (months < 0) {
-        if (selectedMonth.month == 1) {
-          selectedMonth = DateTime(selectedMonth.year - 1, 12);
-        } else {
-          selectedMonth = DateTime(selectedMonth.year, selectedMonth.month - 1);
-        }
-      } else {
-        if (selectedMonth.month == 12) {
-          selectedMonth = DateTime(selectedMonth.year + 1, 1);
-        } else {
-          selectedMonth = DateTime(selectedMonth.year, selectedMonth.month + 1);
-        }
-      }
-    }
+  void changeSelectedWeek(int weeks) {
+    _selectedWeek = _selectedWeek.add(Duration(days: weeks * 7));
 
     notifyListeners();
   }
 
-  String extractMonth(DateTime month) {
-    return "${month.month}.${month.year}";
+  List<DateTime> weekRange(DateTime week) {
+    List<DateTime> daysInWeek = [];
+
+    for (int i = 0; i < 7; i++) {
+      daysInWeek.add(
+        week.add(
+          Duration(days: i),
+        ),
+      );
+    }
+
+    return daysInWeek;
   }
 
   /// Gets line chart data for a given month.
@@ -139,15 +142,13 @@ class GoalProvider extends ChangeNotifier {
   /// Groups data points by goal UUID into lines.
   ///
   /// Returns map of list of data points for that goal line.
-  Map<String, List<FlSpot>> getLineChartDataForMonth(DateTime month) {
+  Map<String, List<FlSpot>> getLineChartDataForWeek(DateTime week) {
     Map<String, Map<String, Goal>> daysToUse = {};
     Map<String, List<FlSpot>> data = {};
 
-    for (String day in _days.keys) {
-      if (day.contains(extractMonth(month))) {
-        if (_days[day] != null) {
-          daysToUse[day] = _days[day]!;
-        }
+    for (DateTime day in weekRange(week)) {
+      if (dayExists(day)) {
+        daysToUse[extractDay(day)] = _days[extractDay(day)]!;
       }
     }
 
@@ -179,7 +180,7 @@ class GoalProvider extends ChangeNotifier {
   /// Groups data by goal task into lists of booleans for that task.
   ///
   /// Returns a map of lists of booleans for each goal task.
-  Map<String, List<bool>> getBoolDataForMonth(DateTime month) {
+  Map<String, List<bool>> getBoolDataForWeek(DateTime week) {
     Map<String, Map<String, Goal>> daysToUse = {};
 
     /// A List of goals to use
@@ -187,11 +188,9 @@ class GoalProvider extends ChangeNotifier {
     Map<String, List<bool>> data = {};
 
     // Get all needed days
-    for (String day in _days.keys) {
-      if (day.contains(extractMonth(month))) {
-        if (_days[day] != null) {
-          daysToUse[day] = _days[day]!;
-        }
+    for (DateTime day in weekRange(week)) {
+      if (dayExists(day)) {
+        daysToUse[extractDay(day)] = _days[extractDay(day)]!;
       }
     }
 
