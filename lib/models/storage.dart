@@ -5,6 +5,8 @@ import 'package:ontrack/models/storage/boxes.dart';
 class Storage {
   /// Saves for each day the goals as a list of goals
   static Future<void> saveDays(Map<String, Map<String, Goal>> days) async {
+    await Boxes.daysBox.clear();
+
     for (String day in days.keys) {
       await Boxes.daysBox.put(
         day,
@@ -34,6 +36,8 @@ class Storage {
 
   /// Save all goals to storage
   static Future<void> saveGoals(Map<String, Goal> goals) async {
+    await Boxes.allGoalsBox.clear();
+
     for (Goal goal in goals.values) {
       await Boxes.allGoalsBox.put(
         goal.uuid,

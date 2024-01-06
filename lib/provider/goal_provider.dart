@@ -307,8 +307,9 @@ class GoalProvider extends ChangeNotifier {
 
     if (goal.weekdays.contains(DateTime.now().weekday) &&
         dayExists(DateTime.now())) {
-      _days[extractDay(DateTime.now())]!
-          .removeWhere((key, value) => key == goal.uuid);
+      _days[extractDay(DateTime.now())]!.removeWhere(
+        (key, value) => key == goal.uuid,
+      );
     }
 
     await Storage.saveDays(_days);
