@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:planer/constants/colors.dart';
-import 'package:planer/extensions/navigator_extension.dart';
-import 'package:planer/extensions/theme_extension.dart';
-import 'package:planer/models/goal/goal.dart';
-import 'package:planer/models/weekday.dart';
-import 'package:planer/pages/home_page.dart';
-import 'package:planer/provider/goal_provider.dart';
+import 'package:ontrack/constants/colors.dart';
+import 'package:ontrack/extensions/navigator_extension.dart';
+import 'package:ontrack/extensions/theme_extension.dart';
+import 'package:ontrack/models/goal/goal.dart';
+import 'package:ontrack/models/weekday.dart';
+import 'package:ontrack/pages/home_page.dart';
+import 'package:ontrack/provider/goal_provider.dart';
 import 'package:provider/provider.dart';
 
 class EditGoalsPage extends StatefulHookWidget {

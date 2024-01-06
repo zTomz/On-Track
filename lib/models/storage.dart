@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:planer/models/goal/goal.dart';
-import 'package:planer/models/storage/boxes.dart';
+import 'package:ontrack/models/goal/goal.dart';
+import 'package:ontrack/models/storage/boxes.dart';
 
 class Storage {
   /// Saves for each day the goals as a list of goals

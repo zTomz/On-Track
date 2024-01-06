@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:planer/extensions/navigator_extension.dart';
-import 'package:planer/pages/data_page.dart';
-import 'package:planer/pages/home_page.dart';
-import 'package:planer/pages/settings/settings_page.dart';
+import 'package:ontrack/extensions/navigator_extension.dart';
+import 'package:ontrack/pages/data_page.dart';
+import 'package:ontrack/pages/home_page.dart';
+import 'package:ontrack/pages/settings/settings_page.dart';
 
 class NavBar extends StatelessWidget {
   final int currentPage;

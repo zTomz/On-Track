@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:planer/extensions/theme_extension.dart';
+import 'package:ontrack/extensions/theme_extension.dart';
 
 class SettingsSection extends StatelessWidget {
   final String title;

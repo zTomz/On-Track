@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:planer/extensions/navigator_extension.dart';
-import 'package:planer/extensions/theme_extension.dart';
-import 'package:planer/models/goal/goal.dart';
-import 'package:planer/pages/widgets/day_app_bar.dart';
-import 'package:planer/pages/widgets/nav_bar.dart';
-import 'package:planer/provider/goal_provider.dart';
+import 'package:ontrack/extensions/navigator_extension.dart';
+import 'package:ontrack/extensions/theme_extension.dart';
+import 'package:ontrack/models/goal/goal.dart';
+import 'package:ontrack/pages/widgets/day_app_bar.dart';
+import 'package:ontrack/pages/widgets/nav_bar.dart';
+import 'package:ontrack/provider/goal_provider.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:planer/provider/goal_provider.dart';
+import 'package:ontrack/provider/goal_provider.dart';
 import 'package:provider/provider.dart';
 
 class DayAppBar extends StatelessWidget implements PreferredSizeWidget {

@@ -2,11 +2,11 @@ import 'dart:math';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:planer/extensions/theme_extension.dart';
-import 'package:planer/pages/widgets/nav_bar.dart';
-import 'package:planer/provider/goal_provider.dart';
+import 'package:ontrack/extensions/theme_extension.dart';
+import 'package:ontrack/pages/widgets/nav_bar.dart';
+import 'package:ontrack/provider/goal_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:planer/extensions/date_time_extension.dart';
+import 'package:ontrack/extensions/date_time_extension.dart';
 
 class DataPage extends StatelessWidget {
   const DataPage({super.key});

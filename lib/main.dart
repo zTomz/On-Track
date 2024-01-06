@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:planer/constants/colors.dart';
-import 'package:planer/models/goal/goal.dart';
-import 'package:planer/pages/home_page.dart';
-import 'package:planer/provider/goal_provider.dart';
-import 'package:planer/provider/settings_provider.dart';
+import 'package:ontrack/constants/colors.dart';
+import 'package:ontrack/models/goal/goal.dart';
+import 'package:ontrack/pages/home_page.dart';
+import 'package:ontrack/provider/goal_provider.dart';
+import 'package:ontrack/provider/settings_provider.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
     final settingsProvider = context.watch<SettingsProvider>();
 
     return MaterialApp(
-      title: 'Planer',
+      title: 'ontrack',
       theme: ThemeData(
         fontFamily: "Montserrat",
         colorScheme: ColorScheme.fromSeed(

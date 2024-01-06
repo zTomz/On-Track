@@ -1,7 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:planer/models/goal/goal.dart';
-import 'package:planer/models/storage.dart';
+import 'package:ontrack/models/goal/goal.dart';
+import 'package:ontrack/models/storage.dart';
 
 class GoalProvider extends ChangeNotifier {
   GoalProvider() {

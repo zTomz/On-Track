@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:planer/models/goal/goal.dart';
+import 'package:ontrack/models/goal/goal.dart';
 
 @immutable
 class Boxes {

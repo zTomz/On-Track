@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:planer/extensions/navigator_extension.dart';
-import 'package:planer/models/storage/boxes.dart';
-import 'package:planer/pages/edit_goals_page.dart';
-import 'package:planer/pages/settings/widgets/settings_section.dart';
-import 'package:planer/pages/widgets/nav_bar.dart';
-import 'package:planer/provider/goal_provider.dart';
-import 'package:planer/provider/settings_provider.dart';
+import 'package:ontrack/constants/app.dart';
+import 'package:ontrack/extensions/navigator_extension.dart';
+import 'package:ontrack/models/storage/boxes.dart';
+import 'package:ontrack/pages/edit_goals_page.dart';
+import 'package:ontrack/pages/settings/widgets/settings_section.dart';
+import 'package:ontrack/pages/widgets/nav_bar.dart';
+import 'package:ontrack/provider/goal_provider.dart';
+import 'package:ontrack/provider/settings_provider.dart';
 import 'package:provider/provider.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -165,6 +166,23 @@ class _SettingsPageState extends State<SettingsPage> {
                       },
                     );
                   },
+                ),
+              ],
+            ),
+            SettingsSection(
+              title: "Über",
+              children: [
+                AboutListTile(
+                  icon: const Icon(Icons.info_outline_rounded),
+                  applicationVersion: App.appVersion,
+                  applicationName: App.appName,
+                  applicationIcon: ClipOval(
+                    child: Image.asset(
+                      App.appIcon,
+                      width: 50,
+                      height: 50,
+                    ),
+                  ),
                 ),
               ],
             ),
