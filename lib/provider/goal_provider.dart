@@ -64,6 +64,26 @@ class GoalProvider extends ChangeNotifier {
     return _days.containsKey(extractDay(day));
   }
 
+  bool dayAfterDayExists(DateTime day, {int iterations = 100}) {
+    for (int i = 1; i <= iterations; i++) {
+      if (dayExists(day.add(Duration(days: i)))) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  bool dayBeforeDayExists(DateTime day, {int iterations = 100}) {
+    for (int i = 1; i <= iterations; i++) {
+      if (dayExists(day.subtract(Duration(days: i)))) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
   /// Generates fake data for a set number of days.
   /// The [numberOfDays] parameter determines how many days of data will be generated.
   /// The [startFrom] parameter allows setting a starting date. Defaults to today.

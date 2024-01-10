@@ -18,15 +18,13 @@ class DayAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
       centerTitle: true,
       leading: IconButton(
-        onPressed: goalProvider.dayExists(
-                goalProvider.selectedDay.subtract(const Duration(days: 1)))
+        onPressed: goalProvider.dayBeforeDayExists(goalProvider.selectedDay)
             ? () {
                 goalProvider.dayBack();
                 goalProvider.resetExpandedTiles();
               }
             : null,
-        color: goalProvider.dayExists(
-                goalProvider.selectedDay.subtract(const Duration(days: 1)))
+        color: goalProvider.dayAfterDayExists(goalProvider.selectedDay)
             ? null
             : Colors.grey,
         tooltip: "Vorheriger Tag",
