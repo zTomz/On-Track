@@ -30,20 +30,27 @@ class EditGoalsPageState extends State<EditGoalsPage> {
     final goalProvider = context.watch<GoalProvider>();
 
     final weekdayController = usePageController(
-      viewportFraction: 0.45,
+      viewportFraction: 0.55,
     );
     final taskTextController = useTextEditingController();
     final descriptionTextController = useTextEditingController();
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Ziele ändern'),
+        title: Text(
+          'Ziele ${goalProvider.allGoals.isEmpty ? "erstellen" : "ändern"}',
+        ),
         automaticallyImplyLeading: false,
       ),
       floatingActionButton: MediaQuery.of(context).viewInsets.bottom > 0
           ? null
           : FloatingActionButton.extended(
               onPressed: () {
+                if (goalProvider.allGoals.isEmpty) {
+                  context.showSnackBar("Bitte füge mindestens 1 Ziel hinzu.");
+                  return;
+                }
+
                 context.push(const HomePage());
               },
               icon: const Icon(Icons.arrow_forward_rounded),

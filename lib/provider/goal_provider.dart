@@ -8,13 +8,6 @@ class GoalProvider extends ChangeNotifier {
     _days = Storage.loadDays();
     _allGoals = Storage.loadGoals();
 
-    generateFakeDaysData(
-      50,
-      startFrom: DateTime.now().subtract(
-        const Duration(days: 1),
-      ),
-    );
-
     if (!_days.containsKey(extractDay(DateTime.now()))) {
       addDay(DateTime.now(), notify: false);
     }
@@ -191,6 +184,8 @@ class GoalProvider extends ChangeNotifier {
     for (DateTime day in weekRange(week)) {
       if (dayExists(day)) {
         daysToUse[extractDay(day)] = _days[extractDay(day)]!;
+      } else {
+        daysToUse[extractDay(day)] = {};
       }
     }
 
@@ -214,6 +209,9 @@ class GoalProvider extends ChangeNotifier {
       }
     }
 
+    print("Days to use: $daysToUse");
+    print("Goals to use: $goalsToUse");
+
     for (Goal goal in goalsToUse) {
       // If data for this goal does not exist, create it
       if (!data.containsKey(goal.task)) {
@@ -230,6 +228,8 @@ class GoalProvider extends ChangeNotifier {
         }
       }
     }
+
+    print(data);
 
     return data;
   }

@@ -17,7 +17,7 @@ class DataPage extends StatelessWidget {
     final lineChartData = goalProvider.getLineChartDataForWeek(
       goalProvider.selectedWeek,
     );
-    final boolDataForMonth = goalProvider.getBoolDataForWeek(
+    final boolDataForWeek = goalProvider.getBoolDataForWeek(
       goalProvider.selectedWeek,
     );
 
@@ -101,10 +101,10 @@ class DataPage extends StatelessWidget {
           Expanded(
             flex: 2,
             child: ListView.builder(
-              itemCount: boolDataForMonth.values.length,
+              itemCount: boolDataForWeek.values.length,
               itemBuilder: (context, index) {
-                final title = boolDataForMonth.keys.toList().elementAt(index);
-                final values = boolDataForMonth.values.elementAt(index);
+                final title = boolDataForWeek.keys.toList().elementAt(index);
+                final values = boolDataForWeek.values.elementAt(index);
 
                 return Padding(
                   padding:
