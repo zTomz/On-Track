@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ontrack/extensions/navigator_extension.dart';
 import 'package:ontrack/extensions/theme_extension.dart';
 import 'package:ontrack/models/goal/goal.dart';
+import 'package:ontrack/pages/edit_goals_page.dart';
 import 'package:ontrack/pages/widgets/day_app_bar.dart';
 import 'package:ontrack/pages/widgets/nav_bar.dart';
 import 'package:ontrack/provider/goal_provider.dart';
@@ -17,6 +18,21 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       appBar: const DayAppBar(),
       bottomNavigationBar: const NavBar(currentPage: 1),
+      floatingActionButton: goalProvider.goalsOfDay.isEmpty
+          ? FloatingActionButton.large(
+              onPressed: () {
+                context.push(const EditGoalsPage());
+              },
+              tooltip: "Erstelle ein Ziel",
+              child: const Icon(Icons.add_rounded),
+            )
+          : FloatingActionButton(
+              onPressed: () {
+                context.push(const EditGoalsPage());
+              },
+              tooltip: "Erstelle ein Ziel",
+              child: const Icon(Icons.add_rounded),
+            ),
       body: Column(
         children: [
           Expanded(

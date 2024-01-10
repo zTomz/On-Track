@@ -229,9 +229,6 @@ class GoalProvider extends ChangeNotifier {
       }
     }
 
-    print("Days to use: $daysToUse");
-    print("Goals to use: $goalsToUse");
-
     for (Goal goal in goalsToUse) {
       // If data for this goal does not exist, create it
       if (!data.containsKey(goal.task)) {
@@ -248,8 +245,6 @@ class GoalProvider extends ChangeNotifier {
         }
       }
     }
-
-    print(data);
 
     return data;
   }
