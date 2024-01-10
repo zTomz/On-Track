@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:ontrack/constants/app.dart';
 import 'package:ontrack/extensions/navigator_extension.dart';
@@ -23,7 +24,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Einstellungen"),
+        title: Text(tr("settings")),
         automaticallyImplyLeading: false,
       ),
       bottomNavigationBar: const NavBar(currentPage: 2),
@@ -32,10 +33,10 @@ class _SettingsPageState extends State<SettingsPage> {
         child: ListView(
           children: [
             SettingsSection(
-              title: "Ziele",
+              title: tr("goals"),
               children: [
                 ListTile(
-                  title: const Text("Ziele ändern"),
+                  title: Text(tr("edit_goals")),
                   leading: const Icon(Icons.subdirectory_arrow_right_rounded),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
@@ -47,10 +48,10 @@ class _SettingsPageState extends State<SettingsPage> {
               ],
             ),
             SettingsSection(
-              title: "Aussehen",
+              title: tr("look"),
               children: [
                 ListTile(
-                  title: const Text("Darstellung"),
+                  title: Text(tr("presentation")),
                   leading: Icon(
                     settingsProvider.themeMode == ThemeMode.light
                         ? Icons.light_mode_rounded
@@ -64,9 +65,8 @@ class _SettingsPageState extends State<SettingsPage> {
                       context: context,
                       builder: (_) {
                         return AlertDialog(
-                          title: const Text("Darstellung"),
-                          content:
-                              const Text("Darstellung der Anwendung ändern."),
+                          title: Text(tr("presentation")),
+                          content: Text(tr("change_presentation")),
                           actions: [
                             ThemeMode.light,
                             ThemeMode.dark,
@@ -77,13 +77,13 @@ class _SettingsPageState extends State<SettingsPage> {
 
                               switch (currentTheme) {
                                 case ThemeMode.light:
-                                  text = "Hell";
+                                  text = tr("light");
                                   break;
                                 case ThemeMode.dark:
-                                  text = "Dunkel";
+                                  text = tr("dark");
                                   break;
                                 case ThemeMode.system:
-                                  text = "System";
+                                  text = tr("system");
                                   break;
                               }
 
@@ -121,10 +121,70 @@ class _SettingsPageState extends State<SettingsPage> {
               ],
             ),
             SettingsSection(
-              title: "Speicher",
+              title: "Language",
               children: [
                 ListTile(
-                  title: const Text("Alle Daten löschen"),
+                  title: Text(tr("change_language")),
+                  leading: const Icon(Icons.language_rounded),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (_) {
+                        return AlertDialog(
+                          title: Text(tr("change_language")),
+                          actions: [
+                            RadioListTile(
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.vertical(
+                                  top: Radius.circular(15),
+                                  bottom: Radius.circular(5),
+                                ),
+                              ),
+                              value: const Locale("de"),
+                              groupValue: context.locale,
+                              onChanged: (_) async {
+                                await context.setLocale(const Locale("de"));
+
+                                if (context.mounted) {
+                                  context.pop();
+                                }
+                              },
+                              title: Text(tr("german")),
+                            ),
+                            RadioListTile(
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.vertical(
+                                  top: Radius.circular(5),
+                                  bottom: Radius.circular(15),
+                                ),
+                              ),
+                              value: const Locale("en"),
+                              groupValue: context.locale,
+                              onChanged: (_) async {
+                                await context.setLocale(const Locale("en"));
+
+                                if (context.mounted) {
+                                  context.pop();
+                                }
+                              },
+                              title: Text(tr("english")),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                ),
+              ],
+            ),
+            SettingsSection(
+              title: tr("memory"),
+              children: [
+                ListTile(
+                  title: Text(tr("delete_all_data")),
                   leading: const Icon(Icons.delete_forever_rounded),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
@@ -134,16 +194,16 @@ class _SettingsPageState extends State<SettingsPage> {
                       context: context,
                       builder: (_) {
                         return AlertDialog(
-                          title: const Text("Sind Sie sicher?"),
-                          content: const Text(
-                            "Sind Sie sicher, dass alle Daten gelöscht werden sollen?",
+                          title: Text(tr("are_you_sure")),
+                          content: Text(
+                            tr("sure_to_delete_all_data"),
                           ),
                           actions: [
                             TextButton(
                               onPressed: () {
                                 context.pop();
                               },
-                              child: const Text("Abbrechen"),
+                              child: Text(tr("cancel")),
                             ),
                             TextButton(
                               onPressed: () async {
@@ -153,13 +213,11 @@ class _SettingsPageState extends State<SettingsPage> {
                                 if (context.mounted) {
                                   context.read<GoalProvider>().reset();
 
-                                  context.showSnackBar(
-                                    "Alle Daten wurden gelöscht.",
-                                  );
+                                  context.showSnackBar(tr("all_data_deleted"));
                                   context.pop();
                                 }
                               },
-                              child: const Text("Alles löschen"),
+                              child: Text(tr("delete_all_data")),
                             ),
                           ],
                         );

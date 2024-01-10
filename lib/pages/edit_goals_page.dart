@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:ontrack/constants/colors.dart';
@@ -38,7 +39,7 @@ class EditGoalsPageState extends State<EditGoalsPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Ziele ${goalProvider.allGoals.isEmpty ? "erstellen" : "ändern"}',
+          goalProvider.allGoals.isEmpty ? tr("create_goal") : tr("edit_goal"),
         ),
         automaticallyImplyLeading: false,
       ),
@@ -47,14 +48,14 @@ class EditGoalsPageState extends State<EditGoalsPage> {
           : FloatingActionButton.extended(
               onPressed: () {
                 if (goalProvider.allGoals.isEmpty) {
-                  context.showSnackBar("Bitte füge mindestens 1 Ziel hinzu.");
+                  context.showSnackBar(tr("please_enter_at_least_one_number"));
                   return;
                 }
 
                 context.push(const HomePage());
               },
               icon: const Icon(Icons.arrow_forward_rounded),
-              label: const Text("Speichern"),
+              label: Text(tr("save")),
             ),
       body: Column(
         children: [
@@ -71,14 +72,14 @@ class EditGoalsPageState extends State<EditGoalsPage> {
                         child: TextFormField(
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return "Bitte gib einen Titel ein";
+                              return tr("please_enter_a_title");
                             }
 
                             return null;
                           },
                           controller: taskTextController,
-                          decoration: const InputDecoration(
-                            border: OutlineInputBorder(
+                          decoration: InputDecoration(
+                            border: const OutlineInputBorder(
                               borderRadius: BorderRadius.only(
                                 topLeft: Radius.circular(15),
                                 topRight: Radius.circular(5),
@@ -86,14 +87,14 @@ class EditGoalsPageState extends State<EditGoalsPage> {
                                 bottomRight: Radius.circular(5),
                               ),
                             ),
-                            labelText: "Neues Ziel",
+                            labelText: tr("new_goal"),
                           ),
                         ),
                       ),
                     ),
                     const SizedBox(width: 10),
                     Tooltip(
-                      message: "Zeige/Verberge Tagauswahl",
+                      message: tr("show_hide_days"),
                       child: InkWell(
                         onTap: () {
                           setState(() {
@@ -131,14 +132,14 @@ class EditGoalsPageState extends State<EditGoalsPage> {
                 const SizedBox(height: 10),
                 TextField(
                   controller: descriptionTextController,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(
+                  decoration: InputDecoration(
+                    border: const OutlineInputBorder(
                       borderRadius: BorderRadius.vertical(
                         top: Radius.circular(5),
                         bottom: Radius.circular(15),
                       ),
                     ),
-                    labelText: "Beschreibung",
+                    labelText: tr("description"),
                   ),
                 ),
               ],
@@ -196,7 +197,7 @@ class EditGoalsPageState extends State<EditGoalsPage> {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    "Wert",
+                    tr("value"),
                     style: context.textTheme.headlineSmall,
                   ),
                 ),
@@ -205,18 +206,18 @@ class EditGoalsPageState extends State<EditGoalsPage> {
                   children: [
                     Expanded(
                       child: SegmentedButton<GoalValueType>(
-                          segments: const [
+                          segments: [
                             ButtonSegment(
                               value: GoalValueType.text,
-                              label: Text("Text"),
+                              label: Text(tr("text")),
                             ),
                             ButtonSegment(
                               value: GoalValueType.number,
-                              label: Text("Zahl"),
+                              label: Text(tr("number")),
                             ),
                             ButtonSegment(
                               value: GoalValueType.bool,
-                              label: Text("Bool"),
+                              label: Text(tr("bool")),
                             ),
                           ],
                           selected: {
@@ -260,7 +261,9 @@ class EditGoalsPageState extends State<EditGoalsPage> {
                           });
                         },
                         icon: const Icon(Icons.add_rounded),
-                        label: const Text("Ziel Hinzufügen"),
+                        label: Text(
+                          tr("add_goal"),
+                        ),
                       ),
                     ),
                   ],
@@ -277,7 +280,7 @@ class EditGoalsPageState extends State<EditGoalsPage> {
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      "Ziele",
+                      tr("goals"),
                       style: context.textTheme.headlineSmall,
                     ),
                   ),
@@ -305,16 +308,16 @@ class EditGoalsPageState extends State<EditGoalsPage> {
                                 context: context,
                                 builder: (context) {
                                   return AlertDialog(
-                                    title: const Text("Ziel löschen"),
-                                    content: const Text(
-                                      "Sind sie sicher, dass sie das Ziel löschen möchten?",
+                                    title: Text(tr("delete_goal")),
+                                    content: Text(
+                                      tr("sure_to_delete_goal"),
                                     ),
                                     actions: [
                                       TextButton(
                                         onPressed: () {
                                           Navigator.pop(context);
                                         },
-                                        child: const Text("Abbrechen"),
+                                        child: Text(tr("cancel")),
                                       ),
                                       TextButton(
                                         onPressed: () async {
@@ -326,14 +329,14 @@ class EditGoalsPageState extends State<EditGoalsPage> {
                                             context.pop();
                                           }
                                         },
-                                        child: const Text("Löschen"),
+                                        child: Text(tr("delete")),
                                       ),
                                     ],
                                   );
                                 },
                               );
                             },
-                            tooltip: "Löschen",
+                            tooltip: tr("delete"),
                             icon: const Icon(Icons.delete_rounded),
                           ),
                         );

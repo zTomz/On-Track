@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:ontrack/extensions/navigator_extension.dart';
 import 'package:ontrack/pages/data_page.dart';
@@ -16,18 +17,18 @@ class NavBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return NavigationBar(
       selectedIndex: currentPage,
-      destinations: const [
+      destinations: [
         NavigationDestination(
-          icon: Icon(Icons.bar_chart_rounded),
-          label: "Daten",
+          icon: const Icon(Icons.bar_chart_rounded),
+          label: tr("data"),
         ),
-        NavigationDestination(
+        const NavigationDestination(
           icon: Icon(Icons.home),
           label: "Home",
         ),
         NavigationDestination(
-          icon: Icon(Icons.settings_rounded),
-          label: "Einstellungen",
+          icon: const Icon(Icons.settings_rounded),
+          label: tr("settings"),
         ),
       ],
       onDestinationSelected: (value) {

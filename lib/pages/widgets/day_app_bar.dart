@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:ontrack/provider/goal_provider.dart';
 import 'package:provider/provider.dart';
@@ -27,7 +28,7 @@ class DayAppBar extends StatelessWidget implements PreferredSizeWidget {
         color: goalProvider.dayAfterDayExists(goalProvider.selectedDay)
             ? null
             : Colors.grey,
-        tooltip: "Vorheriger Tag",
+        tooltip: tr("previous_day"),
         icon: const Icon(Icons.arrow_back_ios_rounded),
       ),
       actions: [
@@ -39,7 +40,7 @@ class DayAppBar extends StatelessWidget implements PreferredSizeWidget {
                   goalProvider.resetExpandedTiles();
                 }
               : null,
-          tooltip: "Nächster Tag",
+          tooltip: tr("next_day"),
           color: goalProvider.dayExists(
                   goalProvider.selectedDay.add(const Duration(days: 1)))
               ? null

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:ontrack/constants/colors.dart';
@@ -20,6 +21,9 @@ void main() async {
   await Hive.openBox<Goal>("allGoalsBox");
   await Hive.openBox("settingsBox");
 
+  // Init localization
+  await EasyLocalization.ensureInitialized();
+
   runApp(
     MultiProvider(
       providers: [
@@ -30,7 +34,15 @@ void main() async {
           create: (_) => SettingsProvider(),
         ),
       ],
-      child: const MyApp(),
+      child: EasyLocalization(
+        supportedLocales: const [
+          Locale('en'),
+          Locale('de'),
+        ],
+        path: 'assets/translations',
+        fallbackLocale: const Locale('en'),
+        child: const MyApp(),
+      ),
     ),
   );
 }
@@ -45,7 +57,10 @@ class MyApp extends StatelessWidget {
     final allGoals = context.read<GoalProvider>().allGoals;
 
     return MaterialApp(
-      title: 'ontrack',
+      title: 'Ontrack',
+      localizationsDelegates: context.localizationDelegates,
+      supportedLocales: context.supportedLocales,
+      locale: context.locale,
       theme: ThemeData(
         fontFamily: "Montserrat",
         colorScheme: ColorScheme.fromSeed(

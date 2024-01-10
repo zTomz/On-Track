@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:ontrack/extensions/navigator_extension.dart';
 import 'package:ontrack/extensions/theme_extension.dart';
@@ -23,14 +24,14 @@ class HomePage extends StatelessWidget {
               onPressed: () {
                 context.push(const EditGoalsPage());
               },
-              tooltip: "Erstelle ein Ziel",
+              tooltip: tr("create_a_goal"),
               child: const Icon(Icons.add_rounded),
             )
           : FloatingActionButton(
               onPressed: () {
                 context.push(const EditGoalsPage());
               },
-              tooltip: "Erstelle ein Ziel",
+              tooltip: tr("create_a_goal"),
               child: const Icon(Icons.add_rounded),
             ),
       body: Column(
@@ -115,7 +116,7 @@ class HomePage extends StatelessWidget {
                                   currentGoal.valueType ==
                                       GoalValueType.number) {
                                 context.showSnackBar(
-                                  "Der Wert muss eine Zahl sein",
+                                  tr("value_has_to_be_a_number"),
                                 );
 
                                 return;
@@ -140,7 +141,7 @@ class HomePage extends StatelessWidget {
 
                               if (context.mounted) {
                                 context.showSnackBar(
-                                  "Wert gespeichert",
+                                  tr("value_saved"),
                                 );
                               }
                             },
@@ -152,8 +153,8 @@ class HomePage extends StatelessWidget {
                               border: const OutlineInputBorder(),
                               labelText: currentGoal.value != null &&
                                       currentGoal.value.toString().isNotEmpty
-                                  ? "Wert: ${currentGoal.value.toString()}"
-                                  : "Wert - ${currentGoal.valueType == GoalValueType.number ? "Zahl" : "Text"}",
+                                  ? "${tr("value")}: ${currentGoal.value.toString()}"
+                                  : "${tr("value")} - ${currentGoal.valueType == GoalValueType.number ? "Zahl" : "Text"}",
                             ),
                           ),
                         ]

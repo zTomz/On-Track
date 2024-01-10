@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:ontrack/extensions/theme_extension.dart';
@@ -31,7 +32,7 @@ class DataPage extends StatelessWidget {
           onPressed: () {
             goalProvider.changeSelectedWeek(-1);
           },
-          tooltip: "Vorheriger Woche",
+          tooltip: tr("previous_week"),
           icon: const Icon(Icons.arrow_back_ios_rounded),
         ),
         actions: [
@@ -39,7 +40,7 @@ class DataPage extends StatelessWidget {
             onPressed: () {
               goalProvider.changeSelectedWeek(1);
             },
-            tooltip: "Nächster Woche",
+            tooltip: tr("next_week"),
             icon: const Icon(Icons.arrow_forward_ios_rounded),
           ),
         ],
